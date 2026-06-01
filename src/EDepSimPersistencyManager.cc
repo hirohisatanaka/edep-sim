@@ -595,7 +595,7 @@ void EDepSim::PersistencyManager::SummarizeTrajectoriesH5(
         part.mass = g4part->GetPDGMass();
         part.pdg = ndTraj->GetPDGEncoding();
         part.parent_track_id = ndTraj->GetParentID();
-        part.root_track_id = EDepSim::TrajectoryMap::FindPrimaryId(part.track_id);
+        part.ancestor_track_id = EDepSim::TrajectoryMap::FindPrimaryId(part.track_id);
         part.px = ndTraj->GetInitialMomentum().x();
         part.py = ndTraj->GetInitialMomentum().y();
         part.pz = ndTraj->GetInitialMomentum().z();
@@ -654,7 +654,7 @@ void EDepSim::PersistencyManager::SummarizeTrajectoriesH5(
     for (auto& part : array2) {
         part.track_id = fTrack2OutputIndex.at(part.track_id);
         part.parent_track_id = fTrack2OutputIndex.at(part.parent_track_id);
-        part.root_track_id = fTrack2OutputIndex.at(part.root_track_id);
+        part.ancestor_track_id = fTrack2OutputIndex.at(part.ancestor_track_id);
         dest.Add(part);
     }
 
@@ -1145,10 +1145,10 @@ EDepSim::PersistencyManager::SummarizeHitSegmentsH5(H5DLP::VLArrayDataset<H5DLP:
                 step.track_id = output_index;
             }
 
-            step.root_track_id = H5DLP::kINVALID_INT;
+            step.ancestor_track_id = H5DLP::kINVALID_INT;
             step.pdg = H5DLP::kINVALID_INT;
             if(output_index < fOutputIndex2Track.size()) {
-                step.root_track_id = part_v.At(output_index).root_track_id;
+                step.ancestor_track_id = part_v.At(output_index).ancestor_track_id;
                 step.pdg = part_v.At(output_index).pdg;
             }
             steps_v[output_index].push_back(step);
